@@ -52,8 +52,12 @@ def get_hourly_sunpos_spa(year, minute,
     return list(sun_alt), list(sun_azi), list(sun_rise), list(sun_set)
 
 
+# Windows or linux
+if os.environ.get('OS','').lower().startswith('win'):
+    path = "/".join(os.path.abspath(__file__).split("\\")[:-1] + ['shared_library/nrel_spa.dll'])
+else:
+    path = "/".join(os.path.abspath(__file__).split("/")[:-1] + ['shared_library/nrel_spa.so'])
 
-path = "/".join(os.path.abspath(__file__).split("\\")[:-1] + ['nrel_spa.dll'])
 c_lib = ctypes.CDLL(path)
 
 def get_sunpos_spa(year, month, day, hour, minute, second,
