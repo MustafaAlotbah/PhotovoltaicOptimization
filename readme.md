@@ -10,6 +10,10 @@ The underlying input data are Test Reference Years (TRY) hourly meteorological d
 
 The following python modules are needed to run the project
 
+- [Anaconda](https://docs.anaconda.com/anaconda/install/index.html) (Optional but recommended)
+
+- [Python 3.8.13](https://www.python.org/downloads/release/python-3813/)
+
 - [NumPy](https://numpy.org)
 
     ```$conda install numpy```
