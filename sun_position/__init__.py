@@ -1,0 +1,1 @@
+from .nrel_spa import by_hour_of_year
