@@ -13,9 +13,9 @@ if __name__ == "__main__":
 
     # Inputs
 
-    address = "Eupenerstr 270, 52076 Aachen"
+    address = "Eupenerstr 270, 52076 Aachen"            # replace with your address
 
-    panel_models = load_simple_models(file_path='../data/simple_models.json')
+    panel_models = load_simple_models(file_path='./data/simple_models.json')    # photovoltaic models data-set
 
     if len(panel_models) <= 0:
         print("Panels data-set is empty!")

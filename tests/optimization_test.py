@@ -11,7 +11,7 @@ if __name__ == "__main__":
     # Inputs
     address = "Eupenerstr 270, 52076 Aachen"
 
-    panel_models = load_simple_models(file_path='../data/simple_models.json')
+    panel_models = load_simple_models(file_path='./data/simple_models.json')
 
     if len(panel_models) <= 0:
         print("No panels in the dataset")
