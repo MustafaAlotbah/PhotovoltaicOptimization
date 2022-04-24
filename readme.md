@@ -4,7 +4,7 @@
 
 This project is a tool for estimating an optimal design of a grid-connected photovoltaic (PV) open rack panel system, optionally coupled with a battery storage system (BESS).
 
-The underlying input data are Test Reference Years (TRY) hourly meteorological data from the German weather agency (DWD), solar cadaster for the buildings in the North Rhine-Westfalia state of Germany from LANUV, and a mean residential and commercial load profile from BDEW.
+The underlying input data are Test Reference Years ([TRY](https://www.dwd.de/DE/leistungen/testreferenzjahre/testreferenzjahre.html;)) hourly meteorological data from the German weather agency ([DWD](https://www.dwd.de/EN)), solar cadaster for the buildings in the North Rhine-Westfalia state of Germany from [LANUV](https://www.lanuv.nrw.de) ([click here](https://www.opengeodata.nrw.de/produkte/umwelt_klima/klima/solarkataster/photovoltaik/)), and a mean residential and commercial load profile from [BDEW](https://www.bdew.de) ([click here](https://www.bdew.de/energie/standardlastprofile-strom/)).
 
 ## Requirements
 

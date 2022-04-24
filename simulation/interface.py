@@ -35,6 +35,14 @@ class FrozenClass(object):
 
 
 class SimulationResult(FrozenClass):
+    """
+    p_dc_hourly: DC output of the PV array in an hourly format in [Wh]
+    p_ac_hourly: AC output of the PV array in an hourly format in [Wh]
+    p_pv2load_hourly: AC power delivered to the load by the PV in an hourly format in [Wh]
+    p_balance_hourly: AC power balance in an hourly format [Wh]
+    p_bat2load_hourly: AC power delivered to the load by the BESS in an hourly format in [Wh]
+
+    """
     def __init__(self):
         self.p_dc_hourly = None
         self.p_ac_hourly = None

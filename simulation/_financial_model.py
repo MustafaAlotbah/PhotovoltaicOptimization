@@ -185,6 +185,14 @@ def get_total_cost(
         e_surplus: np.array,
         simulation: Simulation
 ) -> None:
+    """
+    This function calculates the LCOE of the PV, BESS and the total LCOE
+    :param c_nom: Battery's capacity in [Wh]
+    :param n_modules: Number of modules, float
+    :param p_surplus: probabilities of the surplus distribution
+    :param e_surplus: energies of the surplus distributions
+    :param simulation: simulation object
+    """
 
     simulate_battery(
         c_nom, simulation

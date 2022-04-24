@@ -77,9 +77,16 @@ def get_energy_distributions(energy_balance, num_classes=100):
 
 def simulate(
         n_modules: float,
-        c_nom: float,                   # [Wh]
+        c_nom: float,
         simulation: Simulation,
 ) -> float:
+
+    """
+    Start a simulation for a simulation object.
+    :param n_modules: Number of modules, float to make the optimization process smooth
+    :param c_nom: The battery's capacity in [Wh]
+    :param simulation: The simulation object
+    """
 
     if n_modules <= 0:
         return simulation.params.cost_kwh_grid

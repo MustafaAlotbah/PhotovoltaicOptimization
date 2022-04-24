@@ -22,8 +22,8 @@ def get_day_month(day_year):
 
 
 def get_hourly_sunpos_spa(year, minute,
-               lat, lon, timezone,
-               site_elev, pressure, temp, tilt, azm_rotation):
+                          lat, lon, timezone,
+                          site_elev, pressure, temp, tilt, azm_rotation):
 
     path = "/".join(os.path.abspath(__file__).split("\\")[:-1] + ['nrel_spa.dll'])
     c_lib = ctypes.CDLL(path)
