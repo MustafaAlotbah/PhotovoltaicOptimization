@@ -109,7 +109,7 @@ if __name__ == "__main__":
                 multiplier = 100
             if var.startswith("life"):
                 unit = "years"
-            if var.startswith("self"):
+            if any([word in var for word in ["self", "return"]]):
                 unit = "%"
                 multiplier = 100
             if any([word in var for word in ["cost", "bill", "compensation", "equity"]]):

@@ -84,6 +84,10 @@ class SimulationResult(FrozenClass):
 
         self.equity = None
 
+        self.annual_costs_with_system = None
+        self.annual_savings = None
+        self.return_on_investment = None
+
         self._freeze()
 
 
