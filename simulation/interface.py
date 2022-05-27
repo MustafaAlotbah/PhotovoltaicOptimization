@@ -125,6 +125,7 @@ class SimulationParams:
         self.additional_costs=additional_costs
         self.min_soc=min_soc
         self.max_soc=max_soc
+        self.diffuse_model=diffuse_model
 
 
 class Simulation:
@@ -134,7 +135,7 @@ class Simulation:
             panel: PhotovoltaicModel,
             load_profile: dict,
             params: SimulationParams,
-            minute_modifer=+0.5
+            minute_modifer=+0.5,
     ):
         self.result = SimulationResult()
         self.address = address
@@ -164,6 +165,7 @@ class Simulation:
                 inclination=row['slope'],
                 azimuth=row['orientation'],
                 albedo=0.2,
+                diffuse_model=params.diffuse_model,
                 roof_index=index
             )
 

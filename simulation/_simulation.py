@@ -148,7 +148,6 @@ def simulate(
 
     simulation.result.annual_costs_with_system = simulation.p_load.sum()/1000 * simulation.result.lcoe
     simulation.result.annual_savings = simulation.p_load.sum()/1000 * simulation.params.cost_kwh_grid - simulation.result.net_annual_bill_annually
-
     simulation.result.return_on_investment = simulation.result.annual_savings / simulation.result.equity
 
     return simulation.result.lcoe

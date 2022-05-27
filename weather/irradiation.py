@@ -1,7 +1,7 @@
 
 from math import cos, sin, pi, acos, floor
 from .weather_profile import WeatherData
-
+from .perez import perez_diffusion
 
 def deg2rad(a):
     return a * pi / 180
@@ -67,7 +67,7 @@ def diffuse_irradiation_tilted(inclination: float, radiation: list, weather_prof
     return ls
 
 
-def reflected_irradiation_tilted(inclination: float, direct_radiation: list, diffuse_radiation: list, weather_profile: WeatherData, albedo=0.2):
+def reflected_irradiation_tilted(inclination: float, direct_radiation: list, diffuse_radiation: list, weather_profile: WeatherData, albedo=0.2, threshold=-0.25):
     ls = []
     for i in range(8760):
 
@@ -75,7 +75,7 @@ def reflected_irradiation_tilted(inclination: float, direct_radiation: list, dif
         i_reflect_tilted = (1 - cos(deg2rad(inclination))) * radiation / 2 * albedo
         i_reflect_tilted = max(i_reflect_tilted, 0)
 
-        if weather_profile.sun_altitude[i] < -0.25:
+        if weather_profile.sun_altitude[i] < threshold:
             i_reflect_tilted = 0
 
         ls.append(i_reflect_tilted)
@@ -90,24 +90,27 @@ def global_irradiation_tilted(
         direct_radiation: list,
         diffuse_radiation: list,
         roof_index,
+        diffuse_model="isotropic",
         albedo=0.2
 ) -> list:
 
-    # if roof_index == logger.debugging_roof_index():
-    #     logger.add_column(f"i_b_file", direct_radiation)
-    #     logger.add_column(f"i_dif_file", diffuse_radiation)
-
     direct = direct_irradiation_tilted(inclination, azimuth, weather_profile, direct_radiation, roof_index=roof_index)
-    diffuse = diffuse_irradiation_tilted(inclination, diffuse_radiation, weather_profile)
-    reflect = reflected_irradiation_tilted(inclination, direct_radiation, diffuse_radiation, weather_profile, albedo=albedo)
-    i_global = [direct[i] + diffuse[i] + reflect[i] for i in range(8760)]
 
-    # if roof_index == logger.debugging_roof_index():
-    #     logger.add_column(f"i_bn", direct)
-    #     logger.add_column(f"i_dif", [diffuse[i] + reflect[i] for i in range(8760)])
-    #     logger.add_column(f"i_dif_only", diffuse)
-    #     logger.add_column(f"i_ref", reflect)
-    #     logger.add_column(f"i_g", i_global)
+    if diffuse_model == "isotropic":
+        diffuse = diffuse_irradiation_tilted(inclination, diffuse_radiation, weather_profile)
+        reflect = reflected_irradiation_tilted(inclination, direct_radiation, diffuse_radiation, weather_profile,
+                                               albedo=albedo)
+    elif diffuse_model == "perez":
+        diffuse = perez_diffusion(inclination, azimuth, weather_profile)
+        reflect = reflected_irradiation_tilted(inclination, direct_radiation, diffuse_radiation, weather_profile,
+                                               albedo=albedo, threshold=2.5)
+    else:
+        raise ValueError("Diffuse irradiation model is not defined!")
+
+
+
+
+    i_global = [direct[i] + diffuse[i] + reflect[i] for i in range(8760)]
 
     return i_global
 
@@ -116,6 +119,7 @@ def get_incident_radiation(
         weather_profile: WeatherData,
         inclination: float, azimuth,
         roof_index,
+        diffuse_model="isotropic",
         albedo=0.2
 ) -> list:
 
@@ -141,5 +145,6 @@ def get_incident_radiation(
         adjusted_beam,
         weather_profile.diffuse_horizontal_irradiance,
         albedo=albedo,
+        diffuse_model=diffuse_model,
         roof_index=roof_index
     )
