@@ -70,7 +70,7 @@ def get_building(lon: float, lat: float, gemeinde: str) -> dict:
     return result
 
 
-def get_surfaces_info(building, panel_width, panel_height, min_inclination=15, max_inclination=45):
+def get_surfaces_info(building, panel_width, panel_height, shadow_offset=0, min_inclination=15, max_inclination=45):
     ids = []
     geos = []
     slopes = []
@@ -101,7 +101,7 @@ def get_surfaces_info(building, panel_width, panel_height, min_inclination=15, m
         )
 
         if min_inclination <= slopes[-1] <= max_inclination:
-            poss = f_fit(surfaces[0], orientations[-1], panel_width, panel_height, surfaces=surfaces[1:])
+            poss = f_fit(surfaces[0], orientations[-1], panel_width, panel_height, shadow_offset=shadow_offset, surfaces=surfaces[1:])
         else:
             poss = []
 

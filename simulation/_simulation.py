@@ -142,6 +142,7 @@ def simulate(
 
     # flatten variables
     simulation.result.p_dc_hourly = simulation.result.p_dc_hourly.flatten().tolist()
+    print(simulation.result.p_dc_hourly )
     simulation.result.p_ac_hourly = simulation.result.p_ac_hourly.flatten().tolist()
     simulation.result.p_pv2load_hourly = simulation.result.p_pv2load_hourly.flatten().tolist()
     simulation.result.p_balance_hourly = simulation.result.p_balance_hourly.flatten().tolist()

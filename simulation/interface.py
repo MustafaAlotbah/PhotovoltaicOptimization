@@ -36,7 +36,7 @@ class FrozenClass(object):
 
 class SimulationResult(FrozenClass):
     """
-    p_dc_hourly: DC output of the PV array in an hourly format in [Wh]
+    p_dc_hourly: DC output of the PV array in aKn hourly format in [Wh]
     p_ac_hourly: AC output of the PV array in an hourly format in [Wh]
     p_pv2load_hourly: AC power delivered to the load by the PV in an hourly format in [Wh]
     p_balance_hourly: AC power balance in an hourly format [Wh]
@@ -109,6 +109,7 @@ class SimulationParams:
             additional_costs=0,
             min_soc=0.10,
             max_soc=0.95,
+            diffuse_model="isotropic"
     ):
         self.cost_bat_kwh=cost_bat_kwh
         self.bat_eff=bat_eff
@@ -126,6 +127,7 @@ class SimulationParams:
         self.min_soc=min_soc
         self.max_soc=max_soc
         self.diffuse_model=diffuse_model
+        self.shadow_offset = 0
 
 
 class Simulation:
@@ -135,7 +137,7 @@ class Simulation:
             panel: PhotovoltaicModel,
             load_profile: dict,
             params: SimulationParams,
-            minute_modifer=+0.5,
+            minute_modifier=+0.5,
     ):
         self.result = SimulationResult()
         self.address = address
@@ -150,10 +152,11 @@ class Simulation:
             panel_width=panel.width,
             panel_height=panel.height,
             min_inclination=15,
-            max_inclination=45
+            max_inclination=45,
+            shadow_offset=params.shadow_offset
         )
 
-        self.weather = weather.by_zip_code(self.zip_code, minute_modifier=minute_modifer)
+        self.weather = weather.by_zip_code(self.zip_code, minute_modifier=minute_modifier)
 
         # get incident radiation on each surface
         annual_irradiance = []
@@ -165,7 +168,7 @@ class Simulation:
                 inclination=row['slope'],
                 azimuth=row['orientation'],
                 albedo=0.2,
-                diffuse_model=params.diffuse_model,
+                diffuse_model=self.params.diffuse_model,
                 roof_index=index
             )
 

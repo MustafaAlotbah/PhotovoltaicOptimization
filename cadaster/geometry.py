@@ -8,6 +8,7 @@ import numpy as np
 # from cadaster.__main__ import get_building
 import math
 
+
 def smooth_shape(shape):
     res = shape[:]
     for i in range(len(res) - 1):
@@ -15,6 +16,7 @@ def smooth_shape(shape):
             res[i + 1] = [(res[i][0] + res[i + 1][0]) / 2, (res[i][1] + res[i + 1][1]) / 2]
 
     return res
+
 
 def smooth_shape_n(shape, n):
     res = shape
@@ -38,6 +40,27 @@ def center_shape(shape, around=None):
     if around is None:
         around = get_centroid(shape)
     return [[point[0] - around[0], point[1] - around[1]] for point in shape], around
+
+
+def euclidean_distance(point0, point1):
+    return np.sqrt(
+        (point0[0] - point1[0])**2 + (point0[1] - point1[1])**2
+    )
+
+
+# options: scale [0..1], meters [-N, N]
+def scale_shape(shape, **options):
+    new_shape, around = center_shape(shape)
+    if "scale" in options:
+        scale = options["scale"]
+    elif "meters" in options:
+        dist = euclidean_distance([0, 0], new_shape[0])
+        scale = (dist - options["meters"])/dist
+    else:
+        raise NameError("Unknown parameter for scaling!")
+
+    scale = max(0.1, scale)
+    return [[point[0] * scale + around[0], point[1] * scale + around[1]] for point in new_shape]
 
 
 def rotate_point(point, angle):
@@ -207,7 +230,7 @@ def f_fit_fixed(shape, orientation, rect_width, rect_height, resl=20, surfaces=[
 
 
 
-def fit_fixed_exact(mother_shape, orientation, rect_width, recht_height, resl=4, subsurfaces=None):
+def fit_fixed_exact(mother_shape, orientation, rect_width, recht_height, resl=4, shadow_offset=0, subsurfaces=None):
     if subsurfaces is None:
         subsurfaces = []
 
@@ -227,6 +250,7 @@ def fit_fixed_exact(mother_shape, orientation, rect_width, recht_height, resl=4,
         centered_subsurface, _ = center_shape(subsurface[:], around=center)
         centered_subsurface = smooth_shape(smooth_shape(centered_subsurface))
         centered_subsurface = rotate_shape(centered_subsurface, rotation_angle)
+        centered_subsurface = scale_shape(centered_subsurface, meters=shadow_offset)
         centered_subsurfaces.append(centered_subsurface)
 
 
@@ -258,9 +282,9 @@ def fit_fixed_exact(mother_shape, orientation, rect_width, recht_height, resl=4,
     return rects
 
 
-def f_fit(shape, orientation, rect_width, rect_height, resl=2, surfaces=[]):
-    rects_vert = fit_fixed_exact(shape, orientation, rect_width, rect_height, resl=resl, subsurfaces=surfaces)
-    rects_horz = fit_fixed_exact(shape, orientation, rect_height, rect_width, resl=resl, subsurfaces=surfaces)
+def f_fit(shape, orientation, rect_width, rect_height, resl=2, shadow_offset=0, surfaces=[]):
+    rects_vert = fit_fixed_exact(shape, orientation, rect_width, rect_height, shadow_offset=shadow_offset, resl=resl, subsurfaces=surfaces)
+    rects_horz = fit_fixed_exact(shape, orientation, rect_height, rect_width, shadow_offset=shadow_offset, resl=resl, subsurfaces=surfaces)
 
     if len(rects_vert) >= len(rects_horz):
         return rects_vert

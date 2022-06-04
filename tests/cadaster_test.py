@@ -17,7 +17,8 @@ if __name__ == "__main__":
         panel_width=panel_width,
         panel_height=panel_height,
         min_inclination=min_inclination,
-        max_inclination=max_inclination
+        max_inclination=max_inclination,
+        shadow_offset=0  # meters
     )
 
     # plot
